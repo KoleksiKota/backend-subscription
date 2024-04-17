@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class SubscriptionController {
     @GetMapping("/")
     public String subscription() {
-        return "Hello from subscription!";
+        return "subscription";
     }
 }
