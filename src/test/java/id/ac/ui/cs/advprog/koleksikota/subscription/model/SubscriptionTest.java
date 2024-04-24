@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SubscriptionTest {
+    private Subscription subscription;
+
     @BeforeEach
     void setUp() {
         this.subscription = new Subscription();
