@@ -14,19 +14,19 @@ class SubscriptionTest {
 
     @Test
     void testMonthlyCode() {
-        this.subscription.setSubscriptionType(SubscriptionType.MONTHLY.getValue());
+        this.subscription.setSubscriptionType(SubscriptionType.MONTHLY);
 
         assertTrue(subscription.getCode().startsWith("MTH-"));
     }
 
     void testQuarterlyCode() {
-        this.subscription.setSubscriptionType(SubscriptionType.QUARTERLY.getValue());
+        this.subscription.setSubscriptionType(SubscriptionType.QUARTERLY);
 
         assertTrue(subscription.getCode().startsWith("QTR-"));
     }
 
     void testSemiAnnualCode() {
-        this.subscription.setSubscriptionType(SubscriptionType.SEMI_ANNUAL.getValue());
+        this.subscription.setSubscriptionType(SubscriptionType.SEMI_ANNUAL);
 
         assertTrue(subscription.getCode().startsWith("SAA-"));
     }
