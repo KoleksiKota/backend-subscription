@@ -21,12 +21,14 @@ class SubscriptionTest {
         assertTrue(subscription.getCode().startsWith("MTH-"));
     }
 
+    @Test
     void testQuarterlyCode() {
         this.subscription.setSubscriptionType(SubscriptionType.QUARTERLY);
 
         assertTrue(subscription.getCode().startsWith("QTR-"));
     }
 
+    @Test
     void testSemiAnnualCode() {
         this.subscription.setSubscriptionType(SubscriptionType.SEMI_ANNUAL);
 
