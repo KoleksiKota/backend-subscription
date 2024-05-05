@@ -56,4 +56,23 @@ public class SubscriptionIntegratedTest{
         assertEquals(2, parts.length);
         assertEquals(subsType.getValue(), parts[0]+"-");
     }
+
+    @Test
+    void testMonthlyCode() {
+        SubscriptionIntegrated subscription3 = new SubscriptionIntegrated(SubscriptionType.MONTHLY, customerId, boxId);
+
+        assertTrue(subscription3.getSubscriptionCode().startsWith("MTH-"));
+    }
+
+    @Test
+    void testQuarterlyCode() {
+        SubscriptionIntegrated subscription2 = new SubscriptionIntegrated(SubscriptionType.QUARTERLY, customerId, boxId);
+
+        assertTrue(subscription2.getSubscriptionCode().startsWith("QTR-"));
+    }
+
+    @Test
+    void testSemiAnnualCode() {
+        assertTrue(subscription.getSubscriptionCode().startsWith("SAA-"));
+    }
 }
