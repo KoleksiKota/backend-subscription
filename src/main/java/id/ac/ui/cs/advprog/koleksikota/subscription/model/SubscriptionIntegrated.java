@@ -2,6 +2,7 @@ package id.ac.ui.cs.advprog.koleksikota.subscription.model;
 
 import jakarta.persistence.*;
 import id.ac.ui.cs.advprog.koleksikota.subscription.enums.*;
+import id.ac.ui.cs.advprog.koleksikota.subscription.state.*;
 import java.util.Date;
 import java.util.UUID;
 import lombok.Getter;
@@ -46,6 +47,9 @@ public class SubscriptionIntegrated {
     @Column(name="box_id", updatable = false, nullable = false)
     private String boxId;
 
+    @Transient
+    private SubscriptionState state;
+
     public SubscriptionIntegrated() {
         this.subscriptionId = UUID.randomUUID();
     }
@@ -59,5 +63,19 @@ public class SubscriptionIntegrated {
         this.subscriptionType = subsType;
         this.customerId = customerId;
         this.boxId = boxId;
+        this.state = new PendingState();
     }
+
+    public void approve(){
+        this.state.approve(this);
+    }
+
+    public void reject(){
+        this.state.reject(this);
+    }
+
+    public void cancel(){
+        this.state.cancel(this);
+    }
+
 }
