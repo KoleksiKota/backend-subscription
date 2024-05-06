@@ -1,10 +1,10 @@
 package id.ac.ui.cs.advprog.koleksikota.subscription.state;
 
 
-import id.ac.ui.cs.advprog.koleksikota.subscription.model.Subscription;
+import id.ac.ui.cs.advprog.koleksikota.subscription.model.SubscriptionIntegrated;
 
 public interface SubscriptionState {
-    void approve(Subscription subscription);
-    void reject(Subscription subscription);
-    void cancel(Subscription subscription);
+    void approve(SubscriptionIntegrated subscription);
+    void reject(SubscriptionIntegrated subscription);
+    void cancel(SubscriptionIntegrated subscription);
 }
