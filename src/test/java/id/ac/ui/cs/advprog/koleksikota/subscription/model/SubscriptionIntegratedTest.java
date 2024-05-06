@@ -1,6 +1,7 @@
 package id.ac.ui.cs.advprog.koleksikota.subscription.model;
 
 import id.ac.ui.cs.advprog.koleksikota.subscription.enums.*;
+import id.ac.ui.cs.advprog.koleksikota.subscription.state.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -28,24 +29,82 @@ public class SubscriptionIntegratedTest{
         assertEquals(subsType, subscription.getSubscriptionType());
         assertEquals(customerId, subscription.getCustomerId());
         assertEquals(boxId, subscription.getBoxId());
+        assertNull(subscription.getStartDate());
+        assertNull(subscription.getEndDate());
     }
 
     @Test
     public void testApproveStatus() {
-        subscription.setApprovalStatus(ApprovalStatus.APPROVED);
+        subscription.approve();
+        assertInstanceOf(ApprovedState.class, subscription.getState());
         assertEquals(ApprovalStatus.APPROVED, subscription.getApprovalStatus());
+        assertEquals(SubscriptionStatus.SUBSCRIBED, subscription.getSubscriptionStatus());
+        assertNotNull(subscription.getStartDate());
+        assertNull(subscription.getEndDate());
+    }
+
+    @Test //tidak ada perubahan pada rejected state
+    public void testApproveStatusAfterRejected() {
+        subscription.reject();
+        subscription.approve();
+        assertInstanceOf(RejectedState.class, subscription.getState());
+        assertEquals(ApprovalStatus.REJECTED, subscription.getApprovalStatus());
+        assertEquals(SubscriptionStatus.CANCELLED, subscription.getSubscriptionStatus());
+        assertNull(subscription.getStartDate());
+        assertNull(subscription.getEndDate());
     }
 
     @Test 
     public void testRejectStatus() {
-        subscription.setApprovalStatus(ApprovalStatus.REJECTED);
+        subscription.reject();
+        assertInstanceOf(RejectedState.class, subscription.getState());
         assertEquals(ApprovalStatus.REJECTED, subscription.getApprovalStatus());
+        assertEquals(SubscriptionStatus.CANCELLED, subscription.getSubscriptionStatus());
+        assertNull(subscription.getStartDate());
+        assertNull(subscription.getEndDate());
+    }
+
+    @Test //tidak ada perubahan pada Approved state
+    public void testRejectStatusAfterApproved() {
+        subscription.approve();
+        subscription.reject();
+        assertInstanceOf(ApprovedState.class, subscription.getState());
+        assertEquals(SubscriptionStatus.SUBSCRIBED, subscription.getSubscriptionStatus());
+        assertEquals(ApprovalStatus.APPROVED, subscription.getApprovalStatus());
+        assertNotNull(subscription.getStartDate());
+        assertNull(subscription.getEndDate());
     }
 
     @Test
-    public void testSubscriptionBoxIsSubscribed() {
-        subscription.setSubscriptionStatus(SubscriptionStatus.SUBSCRIBED);
-        assertEquals(SubscriptionStatus.SUBSCRIBED, subscription.getSubscriptionStatus());
+    public void testCancelStatusImmediately() {
+        subscription.cancel();
+        assertInstanceOf(CancelledState.class, subscription.getState());
+        assertEquals(ApprovalStatus.PENDING, subscription.getApprovalStatus());
+        assertEquals(SubscriptionStatus.CANCELLED, subscription.getSubscriptionStatus());
+        assertNull(subscription.getStartDate());
+        assertNull(subscription.getEndDate());
+    }
+
+    @Test
+    public void testCancelAfterSubscribed(){
+        subscription.approve();
+        subscription.cancel();
+        assertInstanceOf(CancelledState.class, subscription.getState());
+        assertEquals(ApprovalStatus.APPROVED, subscription.getApprovalStatus());
+        assertEquals(SubscriptionStatus.CANCELLED, subscription.getSubscriptionStatus());
+        assertNotNull(subscription.getStartDate());
+        assertNotNull(subscription.getEndDate());
+    }
+
+    @Test //tidak ada perubahan pada rejected state
+    public void testCancelStatusAfterRejected() {
+        subscription.reject();
+        subscription.cancel();
+        assertInstanceOf(RejectedState.class, subscription.getState());
+        assertEquals(ApprovalStatus.REJECTED, subscription.getApprovalStatus());
+        assertEquals(SubscriptionStatus.CANCELLED, subscription.getSubscriptionStatus());
+        assertNull(subscription.getStartDate());
+        assertNull(subscription.getEndDate());
     }
 
     @Test
@@ -75,4 +134,6 @@ public class SubscriptionIntegratedTest{
     void testSemiAnnualCode() {
         assertTrue(subscription.getSubscriptionCode().startsWith("SAA-"));
     }
+
+
 }
