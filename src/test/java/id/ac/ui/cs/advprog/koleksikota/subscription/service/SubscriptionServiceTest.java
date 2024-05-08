@@ -3,7 +3,7 @@ package id.ac.ui.cs.advprog.koleksikota.subscription.service;
 import id.ac.ui.cs.advprog.koleksikota.subscription.enums.SubscriptionStatus;
 import id.ac.ui.cs.advprog.koleksikota.subscription.enums.SubscriptionType;
 import id.ac.ui.cs.advprog.koleksikota.subscription.model.SubscriptionIntegrated;
-import id.ac.ui.cs.advprog.koleksikota.subscription.repository.SubscriptionIntegratedRepository;
+import id.ac.ui.cs.advprog.koleksikota.subscription.repository.SubscriptionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -18,7 +18,7 @@ import static org.mockito.Mockito.*;
 class SubscriptionServiceTest {
 
     @Mock
-    private SubscriptionIntegratedRepository subscriptionRepository;
+    private SubscriptionRepository subscriptionRepository;
 
     @InjectMocks
     private SubscriptionServiceImpl subscriptionService;
