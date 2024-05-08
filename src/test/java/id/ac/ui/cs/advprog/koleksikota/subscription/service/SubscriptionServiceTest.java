@@ -38,13 +38,13 @@ class SubscriptionServiceTest {
         String boxId = "a0f9de46-90b1-437d-a0bf-d0821dde9096";
         subscription.setBoxId(boxId);
 
-        when(subscriptionRepository.save(subscription)).thenReturn(subscription);
+        when(subscriptionRepository.save(any(SubscriptionIntegrated.class))).thenReturn(subscription);
 
         SubscriptionIntegrated savedSubscription = subscriptionService.createSubscription(subsType, customerId, boxId);
 
         assertEquals(customerId, savedSubscription.getCustomerId());
         assertEquals(boxId, savedSubscription.getBoxId());
-        verify(subscriptionRepository, times(1)).save(subscription);
+        verify(subscriptionRepository, times(1)).save(any(SubscriptionIntegrated.class));
     }
 
     @Test
@@ -55,7 +55,7 @@ class SubscriptionServiceTest {
 
         SubscriptionIntegrated subscription = new SubscriptionIntegrated(subsType, customerId, boxId);
 
-        when(subscriptionRepository.save(subscription)).thenReturn(subscription);
+        when(subscriptionRepository.findById(subscription.getSubscriptionId())).thenReturn(Optional.of(subscription));
 
         subscriptionService.cancelSubscription(String.valueOf(subscription.getSubscriptionId()));
 
