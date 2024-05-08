@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class SubscriptionServiceImpl implements SubscriptionService {
@@ -17,18 +18,22 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
     @Override
     public SubscriptionIntegrated createSubscription(SubscriptionType subsType, String customerId, String boxId) {
-        return null;
+        SubscriptionIntegrated subscription = new SubscriptionIntegrated(subsType, customerId, boxId);
+        return subscriptionRepository.save(subscription);
     }
 
     public SubscriptionIntegrated cancelSubscription(String subscriptionId) {
-        return null;
+        SubscriptionIntegrated subscription = this.findSubscriptionById(subscriptionId);
+        subscription.cancel();
+        subscriptionRepository.save(subscription);
+        return subscription;
     }
 
     public SubscriptionIntegrated findSubscriptionById(String subscriptionId) {
-        return null;
+        return subscriptionRepository.findById(UUID.fromString(subscriptionId)).orElseThrow(() -> new IllegalArgumentException("Subscription with ID " + subscriptionId + " not found"));
     }
 
     public List<SubscriptionIntegrated> findAllSubscriptions() {
-        return null;
+        return subscriptionRepository.findAll();
     }
 }
