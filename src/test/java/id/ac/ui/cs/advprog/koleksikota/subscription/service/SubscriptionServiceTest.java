@@ -1,5 +1,6 @@
 package id.ac.ui.cs.advprog.koleksikota.subscription.service;
 
+import id.ac.ui.cs.advprog.koleksikota.subscription.enums.ApprovalStatus;
 import id.ac.ui.cs.advprog.koleksikota.subscription.enums.SubscriptionStatus;
 import id.ac.ui.cs.advprog.koleksikota.subscription.enums.SubscriptionType;
 import id.ac.ui.cs.advprog.koleksikota.subscription.model.SubscriptionIntegrated;
@@ -90,4 +91,58 @@ class SubscriptionServiceTest {
         assertEquals(subscriptions.size(), foundSubscriptions.size());
         assertTrue(foundSubscriptions.containsAll(subscriptions));
     }
+
+    @Test
+    public void testChangeApprovalStatusToApproved() {
+        SubscriptionType subsType = SubscriptionType.MONTHLY;
+        String customerId = "eb558e9f-1c39-460e-8860-71af6af63bd6";
+        String boxId = "a0f9de46-90b1-437d-a0bf-d0821dde9096";
+
+        SubscriptionIntegrated subscription = new SubscriptionIntegrated(subsType, customerId, boxId);
+
+        UUID subsId = subscription.getSubscriptionId();
+        when(subscriptionRepository.findById(subsId)).thenReturn(Optional.of(subscription));
+
+        SubscriptionIntegrated updatedSubscription = subscriptionService.changeApprovalStatus(subsId.toString(), ApprovalStatus.APPROVED.getValue());
+
+        verify(subscriptionRepository, times(1)).findById(subsId);
+        verify(subscriptionRepository, times(1)).save(subscription);
+        assertEquals(ApprovalStatus.APPROVED, updatedSubscription.getApprovalStatus());
+    }
+
+    @Test
+    public void testChangeApprovalStatusToRejected() {
+        SubscriptionType subsType = SubscriptionType.MONTHLY;
+        String customerId = "eb558e9f-1c39-460e-8860-71af6af63bd6";
+        String boxId = "a0f9de46-90b1-437d-a0bf-d0821dde9096";
+
+        SubscriptionIntegrated subscription = new SubscriptionIntegrated(subsType, customerId, boxId);
+        UUID subsId = subscription.getSubscriptionId();
+
+        when(subscriptionRepository.findById(subsId)).thenReturn(Optional.of(subscription));
+
+        SubscriptionIntegrated updatedSubscription = subscriptionService.changeApprovalStatus(subsId.toString(), ApprovalStatus.REJECTED.getValue());
+
+        verify(subscriptionRepository, times(1)).findById(subsId);
+        verify(subscriptionRepository, times(1)).save(subscription);
+        assertEquals(ApprovalStatus.REJECTED, updatedSubscription.getApprovalStatus());
+    }
+
+    @Test
+    public void testChangeApprovalStatusWithInvalidStatus() {
+        SubscriptionType subsType = SubscriptionType.MONTHLY;
+        String customerId = "eb558e9f-1c39-460e-8860-71af6af63bd6";
+        String boxId = "a0f9de46-90b1-437d-a0bf-d0821dde9096";
+
+        SubscriptionIntegrated subscription = new SubscriptionIntegrated(subsType, customerId, boxId);
+        UUID subsId = subscription.getSubscriptionId();
+        when(subscriptionRepository.findById(subsId)).thenReturn(Optional.of(subscription));
+
+        try {
+            subscriptionService.changeApprovalStatus(subsId.toString(), "DECLINED");
+        } catch (IllegalArgumentException e) {
+            assertEquals("Invalid approval status", e.getMessage());
+        }
+    }
 }
+
