@@ -52,3 +52,4 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         return subscription;
     }
 }
+

@@ -11,4 +11,5 @@ public interface SubscriptionService {
     public SubscriptionIntegrated findSubscriptionById(String subscriptionId);
     public List<SubscriptionIntegrated> findAllSubscriptions();
     public SubscriptionIntegrated changeApprovalStatus(String subscriptionId, String status);
+
 }
