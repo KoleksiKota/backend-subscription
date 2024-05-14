@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.UUID;
 
 public interface SubscriptionService {
-    public SubscriptionIntegrated createSubscription(SubscriptionType subsType, String customerId, String boxId);
-    public SubscriptionIntegrated cancelSubscription(String subscriptionId);
-    public SubscriptionIntegrated findSubscriptionById(String subscriptionId);
-    public List<SubscriptionIntegrated> findAllSubscriptions();
-    public SubscriptionIntegrated changeApprovalStatus(String subscriptionId, String status);
+    SubscriptionIntegrated createSubscription(SubscriptionType subsType, String customerId, String boxId);
+    SubscriptionIntegrated cancelSubscription(String subscriptionId);
+    SubscriptionIntegrated findSubscriptionById(String subscriptionId);
+    List<SubscriptionIntegrated> findAllSubscriptions();
+    SubscriptionIntegrated changeApprovalStatus(String subscriptionId, String status);
 
 }
