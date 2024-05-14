@@ -23,6 +23,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         return subscriptionRepository.save(subscription);
     }
 
+    @Override
     public SubscriptionIntegrated cancelSubscription(String subscriptionId) {
         SubscriptionIntegrated subscription = this.findSubscriptionById(subscriptionId);
         subscription.cancel();
@@ -30,10 +31,12 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         return subscription;
     }
 
+    @Override
     public SubscriptionIntegrated findSubscriptionById(String subscriptionId) {
         return subscriptionRepository.findById(UUID.fromString(subscriptionId)).orElseThrow(() -> new IllegalArgumentException("Subscription with ID " + subscriptionId + " not found"));
     }
 
+    @Override
     public List<SubscriptionIntegrated> findAllSubscriptions() {
         return subscriptionRepository.findAll();
     }
