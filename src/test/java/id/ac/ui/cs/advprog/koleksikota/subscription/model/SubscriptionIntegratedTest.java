@@ -26,6 +26,7 @@ public class SubscriptionIntegratedTest{
         assertNotNull(subscription.getSubscriptionCode());
         assertEquals(ApprovalStatus.PENDING, subscription.getApprovalStatus());
         assertEquals(SubscriptionStatus.PENDING, subscription.getSubscriptionStatus());
+        assertEquals(ApprovalStatus.PENDING.toString(), subscription.getSavedState());
         assertEquals(subsType, subscription.getSubscriptionType());
         assertEquals(customerId, subscription.getCustomerId());
         assertEquals(boxId, subscription.getBoxId());
@@ -39,6 +40,7 @@ public class SubscriptionIntegratedTest{
         assertInstanceOf(ApprovedState.class, subscription.getState());
         assertEquals(ApprovalStatus.APPROVED, subscription.getApprovalStatus());
         assertEquals(SubscriptionStatus.SUBSCRIBED, subscription.getSubscriptionStatus());
+        assertEquals(ApprovalStatus.APPROVED.toString(), subscription.getSavedState());
         assertNotNull(subscription.getStartDate());
         assertNull(subscription.getEndDate());
     }
@@ -50,6 +52,7 @@ public class SubscriptionIntegratedTest{
         assertInstanceOf(RejectedState.class, subscription.getState());
         assertEquals(ApprovalStatus.REJECTED, subscription.getApprovalStatus());
         assertEquals(SubscriptionStatus.CANCELLED, subscription.getSubscriptionStatus());
+        assertEquals(ApprovalStatus.REJECTED.toString(), subscription.getSavedState());
         assertNull(subscription.getStartDate());
         assertNull(subscription.getEndDate());
     }
@@ -60,6 +63,7 @@ public class SubscriptionIntegratedTest{
         assertInstanceOf(RejectedState.class, subscription.getState());
         assertEquals(ApprovalStatus.REJECTED, subscription.getApprovalStatus());
         assertEquals(SubscriptionStatus.CANCELLED, subscription.getSubscriptionStatus());
+        assertEquals(ApprovalStatus.REJECTED.toString(), subscription.getSavedState());
         assertNull(subscription.getStartDate());
         assertNull(subscription.getEndDate());
     }
@@ -71,6 +75,7 @@ public class SubscriptionIntegratedTest{
         assertInstanceOf(ApprovedState.class, subscription.getState());
         assertEquals(SubscriptionStatus.SUBSCRIBED, subscription.getSubscriptionStatus());
         assertEquals(ApprovalStatus.APPROVED, subscription.getApprovalStatus());
+        assertEquals(ApprovalStatus.APPROVED.toString(), subscription.getSavedState());
         assertNotNull(subscription.getStartDate());
         assertNull(subscription.getEndDate());
     }
@@ -81,6 +86,7 @@ public class SubscriptionIntegratedTest{
         assertInstanceOf(CancelledState.class, subscription.getState());
         assertEquals(ApprovalStatus.PENDING, subscription.getApprovalStatus());
         assertEquals(SubscriptionStatus.CANCELLED, subscription.getSubscriptionStatus());
+        assertEquals(SubscriptionStatus.CANCELLED.toString(), subscription.getSavedState());
         assertNull(subscription.getStartDate());
         assertNull(subscription.getEndDate());
     }
@@ -92,6 +98,7 @@ public class SubscriptionIntegratedTest{
         assertInstanceOf(CancelledState.class, subscription.getState());
         assertEquals(ApprovalStatus.APPROVED, subscription.getApprovalStatus());
         assertEquals(SubscriptionStatus.CANCELLED, subscription.getSubscriptionStatus());
+        assertEquals(SubscriptionStatus.CANCELLED.toString(), subscription.getSavedState());
         assertNotNull(subscription.getStartDate());
         assertNotNull(subscription.getEndDate());
     }
@@ -103,6 +110,7 @@ public class SubscriptionIntegratedTest{
         assertInstanceOf(RejectedState.class, subscription.getState());
         assertEquals(ApprovalStatus.REJECTED, subscription.getApprovalStatus());
         assertEquals(SubscriptionStatus.CANCELLED, subscription.getSubscriptionStatus());
+        assertEquals(ApprovalStatus.REJECTED.toString(), subscription.getSavedState());
         assertNull(subscription.getStartDate());
         assertNull(subscription.getEndDate());
     }
