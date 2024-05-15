@@ -1,5 +1,6 @@
 package id.ac.ui.cs.advprog.koleksikota.subscription.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import id.ac.ui.cs.advprog.koleksikota.subscription.enums.*;
 import id.ac.ui.cs.advprog.koleksikota.subscription.state.*;
@@ -47,11 +48,18 @@ public class SubscriptionIntegrated {
     @Column(name="box_id", updatable = false, nullable = false)
     private String boxId;
 
+    @JsonIgnore
+    @Column(name="state", nullable=false)
+    private String savedState;
+
+    @JsonIgnore
     @Transient
     private SubscriptionState state;
 
     public SubscriptionIntegrated() {
         this.subscriptionId = UUID.randomUUID();
+        this.state = new PendingState();
+        this.savedState = SubscriptionStatus.PENDING.toString();
     }
 
     public SubscriptionIntegrated(SubscriptionType subsType, String customerId, String boxId) {
@@ -64,6 +72,25 @@ public class SubscriptionIntegrated {
         this.customerId = customerId;
         this.boxId = boxId;
         this.state = new PendingState();
+        this.savedState = SubscriptionStatus.PENDING.toString();
+    }
+
+    @PostLoad
+    public void afterLoad(){
+        switch(savedState) {
+            case "APPROVED":
+                this.state = new ApprovedState();
+                break;
+            case "REJECTED":
+                this.state = new RejectedState();
+                break;
+            case "CANCELLED":
+                this.state = new CancelledState();
+                break;
+            default:
+                this.state = new PendingState();
+                break;
+        }
     }
 
     public void approve(){

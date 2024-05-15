@@ -12,12 +12,14 @@ public class PendingState implements SubscriptionState {
         subscription.setStartDate(new Date());
         subscription.setSubscriptionStatus(SubscriptionStatus.SUBSCRIBED);
         subscription.setState(new ApprovedState());
+        subscription.setSavedState(ApprovalStatus.APPROVED.toString());
     }
 
     @Override
     public void cancel(SubscriptionIntegrated subscription) {
         subscription.setSubscriptionStatus(SubscriptionStatus.CANCELLED);
         subscription.setState(new CancelledState());
+        subscription.setSavedState(SubscriptionStatus.CANCELLED.toString());
     }
 
     @Override
@@ -25,5 +27,6 @@ public class PendingState implements SubscriptionState {
         subscription.setApprovalStatus(ApprovalStatus.REJECTED);
         subscription.setState(new RejectedState());
         subscription.setSubscriptionStatus(SubscriptionStatus.CANCELLED);
+        subscription.setSavedState(ApprovalStatus.REJECTED.toString());
     }
 }

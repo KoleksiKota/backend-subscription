@@ -16,6 +16,7 @@ public class ApprovedState implements SubscriptionState {
         subscription.setSubscriptionStatus(SubscriptionStatus.CANCELLED);
         subscription.setState(new CancelledState());
         subscription.setEndDate(new Date());
+        subscription.setSavedState(SubscriptionStatus.CANCELLED.toString());
     }
 
     @Override
