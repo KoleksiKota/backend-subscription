@@ -21,4 +21,13 @@ public enum SubscriptionType {
         }
         return false;
     }
+
+    public static SubscriptionType getFromString(String type) {
+        for (SubscriptionType subscriptionType : SubscriptionType.values()) {
+            if (subscriptionType.getValue().equals(type)) {
+                return subscriptionType;
+            }
+        }
+        throw new IllegalArgumentException("Invalid subscription type");
+    }
 }
