@@ -37,6 +37,24 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 }
 
+tasks.register<Test>("unitTest") {
+    description = "Runs unit tests"
+    group = "verification"
+
+    filter{
+        excludeTestsMatching("*FunctionalTest")
+    }
+}
+
+tasks.register<Test>("functionalTest") {
+    description = "Runs functional tests"
+    group = "verification"
+
+    filter{
+        includeTestsMatching("*FunctionalTest")
+    }
+}
+
 tasks.withType<Test> {
     useJUnitPlatform()
 }
