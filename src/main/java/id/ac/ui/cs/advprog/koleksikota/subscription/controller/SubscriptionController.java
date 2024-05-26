@@ -42,11 +42,12 @@ public class SubscriptionController {
         return CompletableFuture.completedFuture(ResponseEntity.ok(createdSubscription));
     }
 
+    @Async
     @PutMapping("subscriptions/{id}/change-status")
-    public ResponseEntity<Subscription> updateApprovalStatus(@PathVariable String id, @RequestBody Map<String, String> requestBody) {
+    public CompletableFuture<ResponseEntity<Subscription>> updateApprovalStatus(@PathVariable String id, @RequestBody Map<String, String> requestBody) {
         String status = requestBody.get("status");
         Subscription updatedSubscription = subscriptionService.changeApprovalStatus(id, status);
-        return ResponseEntity.ok(updatedSubscription);
+        return CompletableFuture.completedFuture(ResponseEntity.ok(updatedSubscription));
     }
 
     @Async
