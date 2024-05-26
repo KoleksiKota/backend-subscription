@@ -50,4 +50,4 @@ jobs:
       - name: Run analysis
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew sonar -Dsonar.projectKey=KoleksiKota_backend-subscription -Dsonar.organization=koleksikota -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=${{ secrets.SONAR_TOKEN }} -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml
+        run: ./gradlew sonar -Dsonar.projectKey=KoleksiKota_backend-subscription -Dsonar.organization=koleksikota -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=${{ secrets.SONAR_TOKEN }} -Dsonar.coverage.jacoco.xmlReportPaths=build/jacocoHtml/index.html
