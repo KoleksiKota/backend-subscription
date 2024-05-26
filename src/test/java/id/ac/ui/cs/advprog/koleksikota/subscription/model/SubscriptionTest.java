@@ -171,4 +171,12 @@ public class SubscriptionTest {
         subscription4.afterLoad();
         assertInstanceOf(CancelledState.class, subscription4.getState());
     }
+
+    @Test
+    public void testGetFromString() {
+        assertEquals(SubscriptionType.MONTHLY, SubscriptionType.getFromString("MTH-"));
+        assertEquals(SubscriptionType.QUARTERLY, SubscriptionType.getFromString("QTR-"));
+        assertEquals(SubscriptionType.SEMI_ANNUAL, SubscriptionType.getFromString("SAA-"));
+        assertThrows(IllegalArgumentException.class, () -> SubscriptionType.getFromString("INVALID"));
+    }
 }
