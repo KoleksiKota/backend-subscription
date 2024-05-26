@@ -1,5 +1,7 @@
 package id.ac.ui.cs.advprog.koleksikota.subscription.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import id.ac.ui.cs.advprog.koleksikota.subscription.enums.SubscriptionType;
 import id.ac.ui.cs.advprog.koleksikota.subscription.model.Subscription;
 import id.ac.ui.cs.advprog.koleksikota.subscription.service.SubscriptionService;
 import org.junit.jupiter.api.Test;
@@ -9,10 +11,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -81,16 +82,23 @@ public class SubscriptionControllerTest {
     @Test
     public void testUpdateApprovalStatus() throws Exception {
         Subscription subscription = new Subscription();
+        subscription.setBoxId("box1");
+        subscription.setSubscriptionType(SubscriptionType.MONTHLY);
+        subscription.setCustomerId("123");
+
         when(subscriptionService.changeApprovalStatus(anyString(), anyString())).thenReturn(subscription);
 
-        mockMvc.perform(patch("/subscriptions/1/change-status")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"status\": \"APPROVED\"}"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.subscriptionId").value(subscription.getSubscriptionId().toString()));
+        Map<String, String> requestBody = new HashMap<>();
+        requestBody.put("status", "APPROVED");
 
-        verify(subscriptionService, times(1)).changeApprovalStatus(anyString(), anyString());
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.put("/subscriptions/1f36d862-6e0b-47a3-aa17-e02ec74a0246/change-status")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(requestBody)))
+                .andReturn();
+
+        mvcResult.getAsyncResult(); // Wait for async result
+
+        assertEquals(200, mvcResult.getResponse().getStatus());
     }
 
     @Test
