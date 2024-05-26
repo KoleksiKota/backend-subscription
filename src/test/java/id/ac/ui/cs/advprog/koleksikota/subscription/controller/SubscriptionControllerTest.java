@@ -10,6 +10,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
+
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -37,6 +39,28 @@ public class SubscriptionControllerTest {
                 .andExpect(jsonPath("$[0]").isNotEmpty());
 
         verify(subscriptionService, times(1)).findAllSubscriptions();
+    }
+
+    @Test
+    public void testFindSubscriptionById() throws Exception {
+        SubscriptionIntegrated subscription = new SubscriptionIntegrated();
+        subscription.setSubscriptionId(UUID.randomUUID());
+        subscription.setCustomerId("123");
+        subscription.setBoxId("box1");
+        subscription.setSubscriptionCode("MTH-123456");
+
+        when(subscriptionService.findSubscriptionById(subscription.getSubscriptionId().toString())).thenReturn(subscription);
+
+        mockMvc.perform(get("/" + subscription.getSubscriptionId().toString())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.subscriptionId").value(subscription.getSubscriptionId().toString()))
+                .andExpect(jsonPath("$.customerId").value(subscription.getCustomerId()))
+                .andExpect(jsonPath("$.boxId").value(subscription.getBoxId()))
+                .andExpect(jsonPath("$.subscriptionCode").value(subscription.getSubscriptionCode()));
+
+        verify(subscriptionService, times(1)).findSubscriptionById(subscription.getSubscriptionId().toString());
     }
 
     @Test
