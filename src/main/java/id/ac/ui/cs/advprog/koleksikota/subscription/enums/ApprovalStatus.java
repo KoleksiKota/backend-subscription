@@ -13,12 +13,4 @@ public enum ApprovalStatus {
         this.value = value;
     }
 
-    public static boolean contains(String param) {
-        for (ApprovalStatus approvalStatus: ApprovalStatus.values()) {
-            if (approvalStatus.name().equals(param)) {
-                return true;
-            }
-        }
-        return false;
-    }
 }

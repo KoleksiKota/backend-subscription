@@ -76,7 +76,7 @@ public class SubscriptionTest {
         assertEquals(SubscriptionStatus.SUBSCRIBED, subscription.getSubscriptionStatus());
         assertEquals(ApprovalStatus.APPROVED, subscription.getApprovalStatus());
         assertEquals(ApprovalStatus.APPROVED.toString(), subscription.getSavedState());
-        assertNotNull(subscription.getStartDate()); 
+        assertNotNull(subscription.getStartDate());
         assertNull(subscription.getEndDate());
     }
 
@@ -171,5 +171,4 @@ public class SubscriptionTest {
         subscription4.afterLoad();
         assertInstanceOf(CancelledState.class, subscription4.getState());
     }
-
 }

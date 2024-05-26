@@ -13,12 +13,4 @@ public enum SubscriptionStatus {
         this.value = value;
     }
 
-    public static boolean contains(String param) {
-        for (SubscriptionStatus subscriptionStatus : SubscriptionStatus.values()) {
-            if (subscriptionStatus.name().equals(param)) {
-                return true;
-            }
-        }
-        return false;
-    }
 }

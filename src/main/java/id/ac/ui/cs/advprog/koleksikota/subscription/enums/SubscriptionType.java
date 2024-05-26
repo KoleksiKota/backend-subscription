@@ -13,15 +13,6 @@ public enum SubscriptionType {
         this.value = value;
     }
 
-    public static boolean contains(String param) {
-        for (SubscriptionType subscriptionType : SubscriptionType.values()) {
-            if (subscriptionType.name().equals(param)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public static SubscriptionType getFromString(String type) {
         for (SubscriptionType subscriptionType : SubscriptionType.values()) {
             if (subscriptionType.getValue().equals(type)) {
