@@ -25,6 +25,12 @@ public class SubscriptionController {
         return ResponseEntity.ok(subscriptions);
     }
 
+    @GetMapping("/{subscriptionId}")
+    public ResponseEntity<SubscriptionIntegrated> findSubscriptionById(@PathVariable String subscriptionId) {
+        SubscriptionIntegrated subscription = subscriptionService.findSubscriptionById(subscriptionId);
+        return ResponseEntity.ok(subscription);
+    }
+
     @PostMapping("/subscription-box/{boxId}/subscribe")
     public ResponseEntity<SubscriptionIntegrated> createSubscription(@PathVariable String boxId, @RequestBody Map<String, String> requestBody) {
         SubscriptionType subsType = SubscriptionType.getFromString(requestBody.get("subsType"));
