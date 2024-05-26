@@ -79,6 +79,17 @@ class SubscriptionServiceTest {
     }
 
     @Test
+    void testFindSubscriptionByIdThrowsExceptionWhenNotFound() {
+        UUID subscriptionId = UUID.randomUUID();
+
+        when(subscriptionRepository.findById(subscriptionId)).thenReturn(Optional.empty());
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            subscriptionService.findSubscriptionById(subscriptionId.toString());
+        });
+    }
+
+    @Test
     void testFindAllSubscriptions() {
         Subscription subscription1 = new Subscription();
         Subscription subscription2 = new Subscription();

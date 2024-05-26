@@ -57,7 +57,7 @@ public class SubscriptionTest {
         assertNull(subscription.getEndDate());
     }
 
-    @Test 
+    @Test
     public void testRejectStatus() {
         subscription.reject();
         assertInstanceOf(RejectedState.class, subscription.getState());
@@ -76,7 +76,7 @@ public class SubscriptionTest {
         assertEquals(SubscriptionStatus.SUBSCRIBED, subscription.getSubscriptionStatus());
         assertEquals(ApprovalStatus.APPROVED, subscription.getApprovalStatus());
         assertEquals(ApprovalStatus.APPROVED.toString(), subscription.getSavedState());
-        assertNotNull(subscription.getStartDate());
+        assertNotNull(subscription.getStartDate()); 
         assertNull(subscription.getEndDate());
     }
 
@@ -143,5 +143,33 @@ public class SubscriptionTest {
         assertTrue(subscription.getSubscriptionCode().startsWith("SAA-"));
     }
 
+    @Test
+    public void testAfterLoad() {
+        // Create a subscription with different saved states
+        Subscription subscription1 = new Subscription();
+        subscription1.setSavedState("PENDING");
+
+        Subscription subscription2 = new Subscription();
+        subscription2.setSavedState("APPROVED");
+
+        Subscription subscription3 = new Subscription();
+        subscription3.setSavedState("REJECTED");
+
+        Subscription subscription4 = new Subscription();
+        subscription4.setSavedState("CANCELLED");
+
+        // Load each subscription and check if the state is set correctly
+        subscription1.afterLoad();
+        assertInstanceOf(PendingState.class, subscription1.getState());
+
+        subscription2.afterLoad();
+        assertInstanceOf(ApprovedState.class, subscription2.getState());
+
+        subscription3.afterLoad();
+        assertInstanceOf(RejectedState.class, subscription3.getState());
+
+        subscription4.afterLoad();
+        assertInstanceOf(CancelledState.class, subscription4.getState());
+    }
 
 }
