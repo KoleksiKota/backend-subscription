@@ -34,16 +34,16 @@ repositories {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-starter-web")
-    compileOnly("org.projectlombok:lombok")
-    developmentOnly("org.springframework.boot:spring-boot-devtools")
-    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
-    annotationProcessor("org.projectlombok:lombok")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    runtimeOnly("org.postgresql:postgresql")
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
     implementation("io.micrometer:micrometer-registry-prometheus")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    compileOnly("org.projectlombok:lombok")
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
+    runtimeOnly("org.postgresql:postgresql")
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+    annotationProcessor("org.projectlombok:lombok")
 }
 
 tasks.register<Test>("unitTest") {
@@ -64,7 +64,7 @@ tasks.register<Test>("functionalTest") {
     }
 }
 
-tasks.withType<Test> {
+tasks.withType<Test>().configureEach() {
     useJUnitPlatform()
 }
 
@@ -72,16 +72,20 @@ tasks.test {
     useJUnitPlatform()
     finalizedBy(tasks.jacocoTestReport) // report is always generated after tests run
 }
-
 tasks.jacocoTestReport {
-    classDirectories.setFrom(files(classDirectories.files.map {
-        fileTree(it) { exclude("**/*Application**") }
-    }))
     dependsOn(tasks.test) // tests are required to run before generating the report
     reports {
-        xml.required.set(false)
-        csv.required.set(false)
+        xml.required.set(true)
+        csv.required.set(true)
         html.outputLocation.set(layout.buildDirectory.dir("jacocoHtml"))
     }
 }
 
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+
+    reports {
+        html.required = true
+        xml.required = true
+    }
+}
