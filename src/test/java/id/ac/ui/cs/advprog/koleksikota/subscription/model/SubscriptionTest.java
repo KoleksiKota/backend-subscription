@@ -7,15 +7,15 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class SubscriptionIntegratedTest{
-    private SubscriptionIntegrated subscription;
+public class SubscriptionTest {
+    private Subscription subscription;
     private final SubscriptionType subsType = SubscriptionType.SEMI_ANNUAL;
     private final String customerId = "6f4f91d2-af1a-4d0a-a60b-c6e0884cebca";
     private final String boxId = "788fab34-43af-44e8-9b1d-00076969a367";
 
     @BeforeEach
     public void setUp() {
-        subscription = new SubscriptionIntegrated(subsType, customerId, boxId);
+        subscription = new Subscription(subsType, customerId, boxId);
     }
 
     @Test
@@ -126,14 +126,14 @@ public class SubscriptionIntegratedTest{
 
     @Test
     void testMonthlyCode() {
-        SubscriptionIntegrated subscription3 = new SubscriptionIntegrated(SubscriptionType.MONTHLY, customerId, boxId);
+        Subscription subscription3 = new Subscription(SubscriptionType.MONTHLY, customerId, boxId);
 
         assertTrue(subscription3.getSubscriptionCode().startsWith("MTH-"));
     }
 
     @Test
     void testQuarterlyCode() {
-        SubscriptionIntegrated subscription2 = new SubscriptionIntegrated(SubscriptionType.QUARTERLY, customerId, boxId);
+        Subscription subscription2 = new Subscription(SubscriptionType.QUARTERLY, customerId, boxId);
 
         assertTrue(subscription2.getSubscriptionCode().startsWith("QTR-"));
     }

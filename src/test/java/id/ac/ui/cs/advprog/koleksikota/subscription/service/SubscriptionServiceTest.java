@@ -3,7 +3,7 @@ package id.ac.ui.cs.advprog.koleksikota.subscription.service;
 import id.ac.ui.cs.advprog.koleksikota.subscription.enums.ApprovalStatus;
 import id.ac.ui.cs.advprog.koleksikota.subscription.enums.SubscriptionStatus;
 import id.ac.ui.cs.advprog.koleksikota.subscription.enums.SubscriptionType;
-import id.ac.ui.cs.advprog.koleksikota.subscription.model.SubscriptionIntegrated;
+import id.ac.ui.cs.advprog.koleksikota.subscription.model.Subscription;
 import id.ac.ui.cs.advprog.koleksikota.subscription.repository.SubscriptionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,7 +31,7 @@ class SubscriptionServiceTest {
 
     @Test
     void testCreateSubscription() {
-        SubscriptionIntegrated subscription = new SubscriptionIntegrated();
+        Subscription subscription = new Subscription();
         SubscriptionType subsType = SubscriptionType.MONTHLY;
         subscription.setSubscriptionType(subsType);
         String customerId = "eb558e9f-1c39-460e-8860-71af6af63bd6";
@@ -39,13 +39,13 @@ class SubscriptionServiceTest {
         String boxId = "a0f9de46-90b1-437d-a0bf-d0821dde9096";
         subscription.setBoxId(boxId);
 
-        when(subscriptionRepository.save(any(SubscriptionIntegrated.class))).thenReturn(subscription);
+        when(subscriptionRepository.save(any(Subscription.class))).thenReturn(subscription);
 
-        SubscriptionIntegrated savedSubscription = subscriptionService.createSubscription(subsType, customerId, boxId);
+        Subscription savedSubscription = subscriptionService.createSubscription(subsType, customerId, boxId);
 
         assertEquals(customerId, savedSubscription.getCustomerId());
         assertEquals(boxId, savedSubscription.getBoxId());
-        verify(subscriptionRepository, times(1)).save(any(SubscriptionIntegrated.class));
+        verify(subscriptionRepository, times(1)).save(any(Subscription.class));
     }
 
     @Test
@@ -54,7 +54,7 @@ class SubscriptionServiceTest {
         String customerId = "eb558e9f-1c39-460e-8860-71af6af63bd6";
         String boxId = "a0f9de46-90b1-437d-a0bf-d0821dde9096";
 
-        SubscriptionIntegrated subscription = new SubscriptionIntegrated(subsType, customerId, boxId);
+        Subscription subscription = new Subscription(subsType, customerId, boxId);
 
         when(subscriptionRepository.findById(subscription.getSubscriptionId())).thenReturn(Optional.of(subscription));
 
@@ -67,12 +67,12 @@ class SubscriptionServiceTest {
     @Test
     void testFindSubscriptionById() {
         UUID subscriptionId = UUID.randomUUID();
-        SubscriptionIntegrated subscription = new SubscriptionIntegrated();
+        Subscription subscription = new Subscription();
         subscription.setSubscriptionId(subscriptionId);
 
         when(subscriptionRepository.findById(subscriptionId)).thenReturn(Optional.of(subscription));
 
-        SubscriptionIntegrated foundSubscription = subscriptionService.findSubscriptionById(String.valueOf(subscriptionId));
+        Subscription foundSubscription = subscriptionService.findSubscriptionById(String.valueOf(subscriptionId));
 
         assertNotNull(foundSubscription);
         assertEquals(subscriptionId, foundSubscription.getSubscriptionId());
@@ -80,13 +80,13 @@ class SubscriptionServiceTest {
 
     @Test
     void testFindAllSubscriptions() {
-        SubscriptionIntegrated subscription1 = new SubscriptionIntegrated();
-        SubscriptionIntegrated subscription2 = new SubscriptionIntegrated();
-        List<SubscriptionIntegrated> subscriptions = Arrays.asList(subscription1, subscription2);
+        Subscription subscription1 = new Subscription();
+        Subscription subscription2 = new Subscription();
+        List<Subscription> subscriptions = Arrays.asList(subscription1, subscription2);
 
         when(subscriptionRepository.findAll()).thenReturn(subscriptions);
 
-        List<SubscriptionIntegrated> foundSubscriptions = subscriptionService.findAllSubscriptions();
+        List<Subscription> foundSubscriptions = subscriptionService.findAllSubscriptions();
 
         assertEquals(subscriptions.size(), foundSubscriptions.size());
         assertTrue(foundSubscriptions.containsAll(subscriptions));
@@ -98,12 +98,12 @@ class SubscriptionServiceTest {
         String customerId = "eb558e9f-1c39-460e-8860-71af6af63bd6";
         String boxId = "a0f9de46-90b1-437d-a0bf-d0821dde9096";
 
-        SubscriptionIntegrated subscription = new SubscriptionIntegrated(subsType, customerId, boxId);
+        Subscription subscription = new Subscription(subsType, customerId, boxId);
 
         UUID subsId = subscription.getSubscriptionId();
         when(subscriptionRepository.findById(subsId)).thenReturn(Optional.of(subscription));
 
-        SubscriptionIntegrated updatedSubscription = subscriptionService.changeApprovalStatus(subsId.toString(), ApprovalStatus.APPROVED.getValue());
+        Subscription updatedSubscription = subscriptionService.changeApprovalStatus(subsId.toString(), ApprovalStatus.APPROVED.getValue());
 
         verify(subscriptionRepository, times(1)).findById(subsId);
         verify(subscriptionRepository, times(1)).save(subscription);
@@ -116,12 +116,12 @@ class SubscriptionServiceTest {
         String customerId = "eb558e9f-1c39-460e-8860-71af6af63bd6";
         String boxId = "a0f9de46-90b1-437d-a0bf-d0821dde9096";
 
-        SubscriptionIntegrated subscription = new SubscriptionIntegrated(subsType, customerId, boxId);
+        Subscription subscription = new Subscription(subsType, customerId, boxId);
         UUID subsId = subscription.getSubscriptionId();
 
         when(subscriptionRepository.findById(subsId)).thenReturn(Optional.of(subscription));
 
-        SubscriptionIntegrated updatedSubscription = subscriptionService.changeApprovalStatus(subsId.toString(), ApprovalStatus.REJECTED.getValue());
+        Subscription updatedSubscription = subscriptionService.changeApprovalStatus(subsId.toString(), ApprovalStatus.REJECTED.getValue());
 
         verify(subscriptionRepository, times(1)).findById(subsId);
         verify(subscriptionRepository, times(1)).save(subscription);
@@ -134,7 +134,7 @@ class SubscriptionServiceTest {
         String customerId = "eb558e9f-1c39-460e-8860-71af6af63bd6";
         String boxId = "a0f9de46-90b1-437d-a0bf-d0821dde9096";
 
-        SubscriptionIntegrated subscription = new SubscriptionIntegrated(subsType, customerId, boxId);
+        Subscription subscription = new Subscription(subsType, customerId, boxId);
         UUID subsId = subscription.getSubscriptionId();
         when(subscriptionRepository.findById(subsId)).thenReturn(Optional.of(subscription));
 

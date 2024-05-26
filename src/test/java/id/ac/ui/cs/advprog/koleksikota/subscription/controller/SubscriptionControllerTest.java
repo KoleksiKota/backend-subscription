@@ -1,6 +1,6 @@
 package id.ac.ui.cs.advprog.koleksikota.subscription.controller;
 
-import id.ac.ui.cs.advprog.koleksikota.subscription.model.SubscriptionIntegrated;
+import id.ac.ui.cs.advprog.koleksikota.subscription.model.Subscription;
 import id.ac.ui.cs.advprog.koleksikota.subscription.service.SubscriptionService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +28,8 @@ public class SubscriptionControllerTest {
 
     @Test
     public void testGetAllSubscriptions() throws Exception {
-        SubscriptionIntegrated subscription = new SubscriptionIntegrated();
-        List<SubscriptionIntegrated> allSubscriptions = Collections.singletonList(subscription);
+        Subscription subscription = new Subscription();
+        List<Subscription> allSubscriptions = Collections.singletonList(subscription);
 
         when(subscriptionService.findAllSubscriptions()).thenReturn(allSubscriptions);
 
@@ -43,7 +43,7 @@ public class SubscriptionControllerTest {
 
     @Test
     public void testFindSubscriptionById() throws Exception {
-        SubscriptionIntegrated subscription = new SubscriptionIntegrated();
+        Subscription subscription = new Subscription();
         subscription.setSubscriptionId(UUID.randomUUID());
         subscription.setCustomerId("123");
         subscription.setBoxId("box1");
@@ -65,7 +65,7 @@ public class SubscriptionControllerTest {
 
     @Test
     public void testCreateSubscription() throws Exception {
-        SubscriptionIntegrated subscription = new SubscriptionIntegrated();
+        Subscription subscription = new Subscription();
         when(subscriptionService.createSubscription(any(), any(), any())).thenReturn(subscription);
 
         mockMvc.perform(post("/subscription-box/1/subscribe")
@@ -80,7 +80,7 @@ public class SubscriptionControllerTest {
 
     @Test
     public void testUpdateApprovalStatus() throws Exception {
-        SubscriptionIntegrated subscription = new SubscriptionIntegrated();
+        Subscription subscription = new Subscription();
         when(subscriptionService.changeApprovalStatus(anyString(), anyString())).thenReturn(subscription);
 
         mockMvc.perform(patch("/subscriptions/1/change-status")
@@ -95,7 +95,7 @@ public class SubscriptionControllerTest {
 
     @Test
     public void testCancelSubscription() throws Exception {
-        SubscriptionIntegrated subscription = new SubscriptionIntegrated();
+        Subscription subscription = new Subscription();
         when(subscriptionService.cancelSubscription(anyString())).thenReturn(subscription);
 
         mockMvc.perform(patch("/subscriptions/1/unsubscribe"))
