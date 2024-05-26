@@ -7,15 +7,15 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class SubscriptionIntegratedTest{
-    private SubscriptionIntegrated subscription;
+public class SubscriptionTest {
+    private Subscription subscription;
     private final SubscriptionType subsType = SubscriptionType.SEMI_ANNUAL;
     private final String customerId = "6f4f91d2-af1a-4d0a-a60b-c6e0884cebca";
     private final String boxId = "788fab34-43af-44e8-9b1d-00076969a367";
 
     @BeforeEach
     public void setUp() {
-        subscription = new SubscriptionIntegrated(subsType, customerId, boxId);
+        subscription = new Subscription(subsType, customerId, boxId);
     }
 
     @Test
@@ -57,7 +57,7 @@ public class SubscriptionIntegratedTest{
         assertNull(subscription.getEndDate());
     }
 
-    @Test 
+    @Test
     public void testRejectStatus() {
         subscription.reject();
         assertInstanceOf(RejectedState.class, subscription.getState());
@@ -126,14 +126,14 @@ public class SubscriptionIntegratedTest{
 
     @Test
     void testMonthlyCode() {
-        SubscriptionIntegrated subscription3 = new SubscriptionIntegrated(SubscriptionType.MONTHLY, customerId, boxId);
+        Subscription subscription3 = new Subscription(SubscriptionType.MONTHLY, customerId, boxId);
 
         assertTrue(subscription3.getSubscriptionCode().startsWith("MTH-"));
     }
 
     @Test
     void testQuarterlyCode() {
-        SubscriptionIntegrated subscription2 = new SubscriptionIntegrated(SubscriptionType.QUARTERLY, customerId, boxId);
+        Subscription subscription2 = new Subscription(SubscriptionType.QUARTERLY, customerId, boxId);
 
         assertTrue(subscription2.getSubscriptionCode().startsWith("QTR-"));
     }
@@ -143,5 +143,40 @@ public class SubscriptionIntegratedTest{
         assertTrue(subscription.getSubscriptionCode().startsWith("SAA-"));
     }
 
+    @Test
+    public void testAfterLoad() {
+        // Create a subscription with different saved states
+        Subscription subscription1 = new Subscription();
+        subscription1.setSavedState("PENDING");
 
+        Subscription subscription2 = new Subscription();
+        subscription2.setSavedState("APPROVED");
+
+        Subscription subscription3 = new Subscription();
+        subscription3.setSavedState("REJECTED");
+
+        Subscription subscription4 = new Subscription();
+        subscription4.setSavedState("CANCELLED");
+
+        // Load each subscription and check if the state is set correctly
+        subscription1.afterLoad();
+        assertInstanceOf(PendingState.class, subscription1.getState());
+
+        subscription2.afterLoad();
+        assertInstanceOf(ApprovedState.class, subscription2.getState());
+
+        subscription3.afterLoad();
+        assertInstanceOf(RejectedState.class, subscription3.getState());
+
+        subscription4.afterLoad();
+        assertInstanceOf(CancelledState.class, subscription4.getState());
+    }
+
+    @Test
+    public void testGetFromString() {
+        assertEquals(SubscriptionType.MONTHLY, SubscriptionType.getFromString("MTH-"));
+        assertEquals(SubscriptionType.QUARTERLY, SubscriptionType.getFromString("QTR-"));
+        assertEquals(SubscriptionType.SEMI_ANNUAL, SubscriptionType.getFromString("SAA-"));
+        assertThrows(IllegalArgumentException.class, () -> SubscriptionType.getFromString("INVALID"));
+    }
 }

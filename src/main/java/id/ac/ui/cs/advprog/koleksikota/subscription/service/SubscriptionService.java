@@ -1,15 +1,14 @@
 package id.ac.ui.cs.advprog.koleksikota.subscription.service;
 
 import id.ac.ui.cs.advprog.koleksikota.subscription.enums.SubscriptionType;
-import id.ac.ui.cs.advprog.koleksikota.subscription.model.SubscriptionIntegrated;
+import id.ac.ui.cs.advprog.koleksikota.subscription.model.Subscription;
 import java.util.List;
-import java.util.UUID;
 
 public interface SubscriptionService {
-    public SubscriptionIntegrated createSubscription(SubscriptionType subsType, String customerId, String boxId);
-    public SubscriptionIntegrated cancelSubscription(String subscriptionId);
-    public SubscriptionIntegrated findSubscriptionById(String subscriptionId);
-    public List<SubscriptionIntegrated> findAllSubscriptions();
-    public SubscriptionIntegrated changeApprovalStatus(String subscriptionId, String status);
+    public Subscription createSubscription(SubscriptionType subsType, String customerId, String boxId);
+    public Subscription cancelSubscription(String subscriptionId);
+    public Subscription findSubscriptionById(String subscriptionId);
+    public List<Subscription> findAllSubscriptions();
+    public Subscription changeApprovalStatus(String subscriptionId, String status);
 
 }

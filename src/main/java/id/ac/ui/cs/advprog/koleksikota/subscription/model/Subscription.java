@@ -14,7 +14,7 @@ import org.hibernate.annotations.CreationTimestamp;
 @Setter
 @Entity
 @Table(name = "subscriptions")
-public class SubscriptionIntegrated {
+public class Subscription {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "subscription_id", updatable = false, nullable = false)
@@ -56,13 +56,13 @@ public class SubscriptionIntegrated {
     @Transient
     private SubscriptionState state;
 
-    public SubscriptionIntegrated() {
+    public Subscription() {
         this.subscriptionId = UUID.randomUUID();
         this.state = new PendingState();
         this.savedState = SubscriptionStatus.PENDING.toString();
     }
 
-    public SubscriptionIntegrated(SubscriptionType subsType, String customerId, String boxId) {
+    public Subscription(SubscriptionType subsType, String customerId, String boxId) {
         this.subscriptionId = UUID.randomUUID();
         this.createdDate = new Date();
         this.subscriptionCode = subsType.getValue() + Long.toHexString(Double.doubleToLongBits(Math.random()));

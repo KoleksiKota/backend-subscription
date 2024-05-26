@@ -1,48 +1,59 @@
 package id.ac.ui.cs.advprog.koleksikota.subscription.controller;
 
-import id.ac.ui.cs.advprog.koleksikota.subscription.model.SubscriptionIntegrated;
+import id.ac.ui.cs.advprog.koleksikota.subscription.model.Subscription;
 import id.ac.ui.cs.advprog.koleksikota.subscription.service.SubscriptionService;
 import id.ac.ui.cs.advprog.koleksikota.subscription.enums.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
-@RestController()
+@RestController
+@CrossOrigin
+@EnableAsync
 public class SubscriptionController {
-    @GetMapping("/")
-    public String subscription() {
-        return "subscription";
-    }
-
     @Autowired
     private SubscriptionService subscriptionService;
 
+    @Async
     @GetMapping("/subscriptions")
-    public ResponseEntity<List<SubscriptionIntegrated>> getAllSubscriptions() {
-        List<SubscriptionIntegrated> subscriptions = subscriptionService.findAllSubscriptions();
-        return ResponseEntity.ok(subscriptions);
+    public CompletableFuture<ResponseEntity<List<Subscription>>> getAllSubscriptions() {
+        List<Subscription> subscriptions = subscriptionService.findAllSubscriptions();
+        return CompletableFuture.completedFuture(ResponseEntity.ok(subscriptions));
     }
 
+    @Async
+    @GetMapping("/{subscriptionId}")
+    public CompletableFuture<ResponseEntity<Subscription>> findSubscriptionById(@PathVariable String subscriptionId) {
+        Subscription subscription = subscriptionService.findSubscriptionById(subscriptionId);
+        return CompletableFuture.completedFuture(ResponseEntity.ok(subscription));
+    }
+
+    @Async
     @PostMapping("/subscription-box/{boxId}/subscribe")
-    public ResponseEntity<SubscriptionIntegrated> createSubscription(@PathVariable String boxId, @RequestBody Map<String, String> requestBody) {
+    public CompletableFuture<ResponseEntity<Subscription>> createSubscription(@PathVariable String boxId, @RequestBody Map<String, String> requestBody) {
         SubscriptionType subsType = SubscriptionType.getFromString(requestBody.get("subsType"));
         String customerId = requestBody.get("customerId");
-        SubscriptionIntegrated newSubscription = subscriptionService.createSubscription(subsType, customerId, boxId);
-        return ResponseEntity.ok(newSubscription);
+        Subscription createdSubscription = subscriptionService.createSubscription(subsType, customerId, boxId);
+        return CompletableFuture.completedFuture(ResponseEntity.ok(createdSubscription));
     }
 
-    @PatchMapping("subscriptions/{id}/change-status")
-    public ResponseEntity<SubscriptionIntegrated> updateApprovalStatus(@PathVariable String id, @RequestBody Map<String, String> requestBody) {
+    @Async
+    @PutMapping("subscriptions/{id}/change-status")
+    public CompletableFuture<ResponseEntity<Subscription>> updateApprovalStatus(@PathVariable String id, @RequestBody Map<String, String> requestBody) {
         String status = requestBody.get("status");
-        SubscriptionIntegrated updatedSubscription = subscriptionService.changeApprovalStatus(id, status);
-        return ResponseEntity.ok(updatedSubscription);
+        Subscription updatedSubscription = subscriptionService.changeApprovalStatus(id, status);
+        return CompletableFuture.completedFuture(ResponseEntity.ok(updatedSubscription));
     }
 
+    @Async
     @PatchMapping("subscriptions/{id}/unsubscribe")
-    public ResponseEntity<SubscriptionIntegrated> cancelSubscription(@PathVariable String id) {
-        SubscriptionIntegrated cancelledSubscription = subscriptionService.cancelSubscription(id);
-        return ResponseEntity.ok(cancelledSubscription);
+    public CompletableFuture<ResponseEntity<Subscription>> cancelSubscription(@PathVariable String id) {
+        Subscription canceledSubscription = subscriptionService.cancelSubscription(id);
+        return CompletableFuture.completedFuture(ResponseEntity.ok(canceledSubscription));
     }
 }
