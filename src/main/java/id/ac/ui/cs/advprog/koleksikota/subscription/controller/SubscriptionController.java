@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 import java.util.List;
 
+@CrossOrigin
 @RestController()
 public class SubscriptionController {
     @GetMapping("/")
@@ -39,7 +40,7 @@ public class SubscriptionController {
         return ResponseEntity.ok(newSubscription);
     }
 
-    @PatchMapping("subscriptions/{id}/change-status")
+    @PutMapping("subscriptions/{id}/change-status")
     public ResponseEntity<Subscription> updateApprovalStatus(@PathVariable String id, @RequestBody Map<String, String> requestBody) {
         String status = requestBody.get("status");
         Subscription updatedSubscription = subscriptionService.changeApprovalStatus(id, status);
