@@ -2,6 +2,8 @@ plugins {
     java
     id("org.springframework.boot") version "3.2.4"
     id("io.spring.dependency-management") version "1.1.4"
+    id("org.sonarqube") version "4.4.1.3373"
+    jacoco
 }
 
 group = "id.ac.ui.cs.advprog.koleksikota"
@@ -9,6 +11,14 @@ version = "0.0.1-SNAPSHOT"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_21
+}
+
+sonar {
+    properties {
+        property("sonar.projectKey", "KoleksiKota_backend-subscription")
+        property("sonar.organization", "koleksikota")
+        property("sonar.host.url", "https://sonarcloud.io")
+    }
 }
 
 configurations {
