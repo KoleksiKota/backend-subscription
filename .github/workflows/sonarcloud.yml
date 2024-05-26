@@ -1,14 +1,6 @@
 name: SonarCloud
 on:
   push:
-    branches: [ "*" ]
-  pull_request:
-    types: [opened, synchronize, reopened]
-    workflow_dispatch:
-
-permissions:
-  pull-requests: read # allows SonarCloud to decorate PRs with analysis results
-
 jobs:
   build:
     name: Build and analyze
@@ -21,33 +13,26 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: 21
-          distribution: 'temurin' # Alternative distribution options are available
+          distribution: 'zulu' # Alternative distribution options are available
       - name: Cache SonarCloud packages
         uses: actions/cache@v3
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
-      - name: Set gradlew as executable
-        run: chmod +x ./gradlew
       - name: Cache Gradle packages
         uses: actions/cache@v3
         with:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
+      - name: Set gradlew as executable
+        run: chmod +x ./gradlew
       - name: Build and analyze
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          PRODUCTION: ${{ secrets.PRODUCTION }}
-          JDBC_DATABASE_PASSWORD: ${{ secrets.JDBC_DATABASE_PASSWORD }}
           JDBC_DATABASE_URL: ${{ secrets.JDBC_DATABASE_URL }}
           JDBC_DATABASE_USERNAME: ${{ secrets.JDBC_DATABASE_USERNAME }}
-        run: ./gradlew build sonar --info
-      - name: Run tests with coverage
-        run: ./gradlew test jacocoTestReport
-      - name: Run analysis
-        env:
+          JDBC_DATABASE_PASSWORD: ${{ secrets.JDBC_DATABASE_PASSWORD }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew sonar -Dsonar.projectKey=KoleksiKota_backend-subscription -Dsonar.organization=koleksikota -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=${{ secrets.SONAR_TOKEN }} -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./gradlew build sonar --info --scan
